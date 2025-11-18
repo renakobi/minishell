@@ -38,6 +38,22 @@ For arrow keys: they use esc sequences "returned value"
 4. Left ← \033[D
 5. ESC  \033
 
+Tasks:
+Rena A
+Khaled B
+| Area                          | Difficulty | Who Handles It |
+| ----------------------------- | ---------- | -------------- |
+| Readline + signals            | 🟠 Medium  | A              |
+| Lexer                         | 🔴 Hard    | A              |
+| Parser                        | 🔴 Hard    | A              |
+| Expansion                     | 🔴 Hard    | B              |
+| Environment management        | 🟠 Medium  | B              |
+| Built-ins                     | 🟠 Medium  | B              |
+| Execution (fork/pipes/redirs) | 🔴 Hard    | B              |
+| Signal handling (during exec) | 🟠 Medium  | A              |
+| Cleanup / Exit                | 🟡 Easy    | B              |
+
+
 tasks/timeline:
 
     Week 1 — Core Setup
