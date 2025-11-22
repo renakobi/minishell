@@ -6,60 +6,13 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 16:54:42 by rkobeiss          #+#    #+#             */
-/*   Updated: 2025/11/18 21:34:42 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2025/11/22 19:38:06 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*buffer(const char *input)
-{
-	int		i;
-	int		j;
-	char	*temp;
-
-	i = 0;
-	j = 0;
-	temp = malloc(ft_strlen(input) + 1);
-	while (input[i] != '|' && input[i] != '<'
-		&& input[i] != '>' && input[i] != ')' && input[i] != '(' && input[i])
-	{
-		temp[j] = input[i];
-		j++;
-		i++;
-	}
-	temp[j] = '\0';
-	return (temp);
-}
-//might have memory leak since malloc-ing more than needed if so malloc(i + 1)
-
-char	*quoted(const char *input, int *i)
-{
-    char *result;
-	
-	result = malloc(1);
-    if (!result)
-		return NULL;
-    result[0] = '\0';
-    while (input[*i] && (input[*i] == '"' || input[*i] == '\'')) {
-        char *segment = read_one(input, i);
-        if (!segment)
-		{
-            free(result);
-            return NULL;
-        }
-        char *tmp = malloc(strlen(result) + strlen(segment) + 1);
-        ft_strcpy(tmp, result);
-        ft_strcat(tmp, segment);
-        free(segment);
-        free(result);
-        result = tmp;
-    }
-
-    return result;
-}
-
-char	*append(const char *input, char *new)
+char	*appends(char *input, const char *new)
 {
 	int		len;
 	char	*temp;
@@ -69,27 +22,80 @@ char	*append(const char *input, char *new)
 	len = ft_strlen(input) + ft_strlen(new);
 	temp = malloc(sizeof(char) * 1 + len);
 	ft_strcpy(temp, input);
-	ft_strcat(temp, input);
+	ft_strcat(temp, new);
 	free(input);
 	return (temp);
-	
 }
 
-t_tok  classify(const char *s)
+t_tok	classify(const char *s)
 {
-    if (!strcmp(s, "|"))
-	    return tok_pipe;
-    if (!strcmp(s, "<"))
-	    return tok_inredi;
-    if (!strcmp(s, ">"))
-	    return tok_outredi;
-    if (!strcmp(s, ">>"))
-	    return tok_append;
-    if (!strcmp(s, "<<"))
-	    return tok_heredoc;
-    if (!strcmp(s, "("))
-	    return tok_lparan;
-    if (!strcmp(s, ")"))
-	    return tok_lparan;
-    return tok_word;
+	if (!strcmp(s, "|"))
+		return (tok_pipe);
+	if (!strcmp(s, "<"))
+		return (tok_inredi);
+	if (!strcmp(s, ">"))
+		return (tok_outredi);
+	if (!strcmp(s, ">>"))
+		return (tok_append);
+	if (!strcmp(s, "<<"))
+		return (tok_heredoc);
+	if (!strcmp(s, "("))
+		return (tok_lparan);
+	if (!strcmp(s, ")"))
+		return (tok_rparan);
+	return (tok_word);
+}
+
+void	push_token(t_token **head, t_tok type, const char *value)
+{
+	t_token	*new;
+	t_token	*tmp;
+
+	if (!head)
+		return ;
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return ;
+	new->type = type;
+	if (value)
+		new->value = strdup(value);
+	else
+		new->value = NULL;
+	new->next = NULL;
+	if (!*head)
+	{
+		*head = new;
+		return ;
+	}
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+void	tokenize(const char *input, t_token **head)
+{
+	int		i;
+	char	*op;
+	char	*word;
+
+	i = 0;
+	while (input[i])
+	{
+		if (ft_isspace(input[i]))
+			i++;
+		else if (is_operator(input[i]))
+		{
+			op = read_operator(input, &i);
+			push_token(head, classify(op), op);
+			free(op);
+		}
+		else
+		{
+			word = read_word(input, &i);
+			push_token(head, tok_word, word);
+			free(word);
+		}
+	}
+	push_token(head, tok_eof, NULL);
 }
