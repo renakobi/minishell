@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:20:11 by rkobeiss          #+#    #+#             */
-/*   Updated: 2025/11/22 18:50:26 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2025/12/09 20:20:02 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,34 @@ char	*read_one(const char *input, int *i)
 	return (segment);
 }
 
-char	*read_word(const char *input, int *i)
+char	*read_word(char *input, int *i)
 {
 	char	*word;
 	char	*seg;
 	char	letter[2];
 
 	word = malloc(1);
-	while (input[*i] && !is_operator(input[*i]) && !is_quoted(input[*i]))
+	if (!word)
+		return (NULL);
+	word[0] = '\0';
+	while (input[*i] && !is_operator(input[*i]))
 	{
 		if (is_quote(input[*i]))
 		{
 			seg = read_one(input, i);
-			word = appends(input, seg);
+			if (!seg)
+				return (word);
+			word = appends(word, seg);
+			free(seg);
 		}
-		else
+		else if (!ft_isspace(input[*i]))
 		{
 			letter[0] = input[*i];
-			letter[1] = 0;
 			word = appends(word, letter);
-			*i++;
+			(*i)++;
 		}
+		else
+			break ;
 	}
 	return (word);
 }
@@ -88,4 +95,11 @@ char	*read_operator(const char *input, int *i)
 		(*i)++;
 		return (op);
 	}
+}
+
+int	ft_isspace(char a)
+{
+	if (a == ' ' || a == '\t')
+		return (1);
+	return (0);
 }

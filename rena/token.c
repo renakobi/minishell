@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 16:54:42 by rkobeiss          #+#    #+#             */
-/*   Updated: 2025/11/22 19:38:06 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2025/12/09 20:15:20 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ char	*appends(char *input, const char *new)
 	int		len;
 	char	*temp;
 
-	if (!new)
+	if (!new || !input)
 		return (NULL);
 	len = ft_strlen(input) + ft_strlen(new);
-	temp = malloc(sizeof(char) * 1 + len);
+	temp = malloc(1 + len);
+	if (!temp)
+		return (NULL);
 	ft_strcpy(temp, input);
 	ft_strcat(temp, new);
 	free(input);
@@ -73,7 +75,7 @@ void	push_token(t_token **head, t_tok type, const char *value)
 	tmp->next = new;
 }
 
-void	tokenize(const char *input, t_token **head)
+void	tokenize(char *input, t_token **head)
 {
 	int		i;
 	char	*op;
