@@ -2,7 +2,7 @@ NAME = minishell
 cc = cc
 CFLAGS = -Werror -Wextra -Wall -g
 
-SRC = read.c token_extra.c token.c test.c
+SRC = read.c token_extra.c token.c test.c helpers.c
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)

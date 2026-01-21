@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:20:11 by rkobeiss          #+#    #+#             */
-/*   Updated: 2025/12/09 20:20:02 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2026/01/21 17:29:47 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,34 +33,53 @@ char	*read_one(const char *input, int *i)
 	strncpy(segment, input + start, len);
 	segment[len] = '\0';
 	if (input[*i] == quote)
+	{
 		(*i)++;
-	return (segment);
+		return (segment);
+	}
+	else
+		printf("minishell: unclosed quote\n");
+	return (0);
+}
+//i might need to add a special case error
+// for each kind of quotes (whether ' or ")
+
+static int	append_quote(char **word, const char *input, int *i)
+{
+	char	*seg;
+
+	seg = read_one(input, i);
+	if (!seg)
+		return (0);
+	*word = appends(*word, seg);
+	free(seg);
+	return (1);
+}
+
+static void	append_char(char **word, char c)
+{
+	char	letter[2];
+
+	letter[0] = c;
+	letter[1] = '\0';
+	*word = appends(*word, letter);
 }
 
 char	*read_word(char *input, int *i)
 {
 	char	*word;
-	char	*seg;
-	char	letter[2];
 
 	word = malloc(1);
 	if (!word)
 		return (NULL);
 	word[0] = '\0';
-	while (input[*i] && !is_operator(input[*i]))
+	while (input[*i] && !is_operator(input[*i]) && !ft_isspace(input[*i]))
 	{
-		if (is_quote(input[*i]))
+		if (is_quote(input[*i]) && !append_quote(&word, input, i))
+			return (word);
+		else if (!is_quote(input[*i]))
 		{
-			seg = read_one(input, i);
-			if (!seg)
-				return (word);
-			word = appends(word, seg);
-			free(seg);
-		}
-		else if (!ft_isspace(input[*i]))
-		{
-			letter[0] = input[*i];
-			word = appends(word, letter);
+			append_char(&word, input[*i]);
 			(*i)++;
 		}
 		else
@@ -95,11 +114,4 @@ char	*read_operator(const char *input, int *i)
 		(*i)++;
 		return (op);
 	}
-}
-
-int	ft_isspace(char a)
-{
-	if (a == ' ' || a == '\t')
-		return (1);
-	return (0);
 }
