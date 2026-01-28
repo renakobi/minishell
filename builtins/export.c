@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kel-mada <kel-mada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/21 18:36:18 by kel-mada          #+#    #+#             */
+/*   Updated: 2026/01/26 18:21:28 by kel-mada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <readline/readline.h> 
@@ -23,6 +35,7 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 	}
 	return (0);
 }
+
 char	*ft_strdup(const char *s)
 {
 	char	*str;
@@ -87,7 +100,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (s1[i] - s2[i]);
 }
 
-int main(int ac, char *av[], char **envp)
+int	main(int ac, char *av[], char **envp)
 {
 	int		i;
 	int		j;
@@ -122,9 +135,9 @@ int main(int ac, char *av[], char **envp)
 	i = 0;
 	while (temp[i + 1])
 	{
-		printf("%s\n", temp[i]);
+		printf("declare -x %s\n", temp[i]);
 		// free(temp[i]);
 		i++;
 	}
-	// free(temp);
+	free(temp);
 }
