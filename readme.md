@@ -38,6 +38,22 @@ For arrow keys: they use esc sequences "returned value"
 4. Left ← \033[D
 5. ESC  \033
 
+Tasks:
+Rena A
+Khaled B
+| Area                          | Difficulty | Who Handles It |
+| ----------------------------- | ---------- | -------------- |
+| Readline + signals            | 🟠 Medium  | A              |
+| Lexer                         | 🔴 Hard    | A              |
+| Parser                        | 🔴 Hard    | A              |
+| Expansion                     | 🔴 Hard    | B              |
+| Environment management        | 🟠 Medium  | B              |
+| Built-ins                     | 🟠 Medium  | B              |
+| Execution (fork/pipes/redirs) | 🔴 Hard    | B              |
+| Signal handling (during exec) | 🟠 Medium  | A              |
+| Cleanup / Exit                | 🟡 Easy    | B              |
+
+
 tasks/timeline:
 
     Week 1 — Core Setup
@@ -60,3 +76,112 @@ Implement redirections and heredoc
 Add builtins (cd, echo, pwd, env, export, unset, exit)
 Environment variable expansion ($VAR, $?)
 Testing, memory cleanup, error messages
+
+📅 Week 1 – Foundations and Parsing Basics
+
+Goal: Get the shell to read, parse, and display commands properly.
+
+Tasks
+
+✅ Understand subject + requirements (signals, leaks, builtins, etc.)
+
+✅ Set up Makefile, libft, header files, struct definitions
+
+✅ Integrate readline and command loop
+
+✅ Implement basic tokenizer (split input by spaces, handle quotes)
+
+✅ Handle simple commands (no pipes, no redirections)
+
+✅ Implement signal handling (SIGINT, SIGQUIT behavior)
+
+Division
+
+A (Core): Setup project structure, readline loop, signals, prompt design
+
+B (Parsing): Tokenizer, handling quotes ' and " correctly, trimming spaces
+
+Expected Time
+
+5–6 days total (around 25–30 hours of work)
+
+📅 Week 2 – Execution and Environment Handling
+
+Goal: Make your shell actually run commands and handle environment variables.
+
+Tasks
+
+✅ Implement environment management (copy envp, export, unset)
+
+✅ Implement $VAR and $? expansions
+
+✅ Use execve to execute binaries in PATH
+
+✅ Implement builtins: echo, pwd, env, exit
+
+✅ Manage child processes and return status codes
+
+Division
+
+A: Implement executor (fork, execve, waitpid, PATH search)
+
+B: Implement environment system + expansion logic
+
+Expected Time
+
+5–6 days
+(You should be able to type commands like ls, pwd, echo $HOME and see correct results)
+
+📅 Week 3 – Pipes, Redirections, and Advanced Parsing
+
+Goal: Support multi-command structures like ls | grep txt > out.txt.
+
+Tasks
+
+✅ Implement redirections: <, >, >>, << (heredoc)
+
+✅ Implement pipes
+
+✅ Connect parser to executor (AST or command list)
+
+✅ Handle edge cases: unclosed quotes, syntax errors
+
+✅ Add builtins: cd, export, unset if not done yet
+
+Division
+
+A: Pipes and file descriptors (dup2, pipe management)
+
+B: Redirections (input/output/append/heredoc)
+
+Expected Time
+
+5–6 days
+
+📅 Week 4 – Testing, Debugging, and Memory Cleanup
+
+Goal: Make the shell stable, leak-free, and compliant.
+
+Tasks
+
+✅ Refactor and clean up
+
+✅ Handle edge cases (e.g., empty input, Ctrl+D)
+
+✅ Test all builtins and expansions
+
+✅ Run Valgrind and fix leaks
+
+✅ Final signal behavior polish
+
+✅ Prepare for evaluation checklist
+
+Division
+
+A: Valgrind, leaks, signals, error messages
+
+B: Testing, edge case handling, command syntax validation
+
+Expected Time
+
+4–5 days

@@ -6,7 +6,11 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 17:20:11 by rkobeiss          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2026/01/23 14:47:46 by rkobeiss         ###   ########.fr       */
+=======
+/*   Updated: 2026/01/21 17:29:47 by rkobeiss         ###   ########.fr       */
+>>>>>>> df227a8b5814963f7ec73ee9c87ced4b92dfd4bb
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +34,31 @@ char	*read_one(const char *input, int *i)
 	segment = malloc(len + 1);
 	if (!segment)
 		return (NULL);
+<<<<<<< HEAD
 	ft_strncpy(segment, input + start, len);
+=======
+	strncpy(segment, input + start, len);
+>>>>>>> df227a8b5814963f7ec73ee9c87ced4b92dfd4bb
 	segment[len] = '\0';
 	if (input[*i] == quote)
 	{
 		(*i)++;
 		return (segment);
 	}
+<<<<<<< HEAD
 	return (printf("minishell: unclosed quote %c\n", quote), NULL);
 }
 //i might need to add a special case error
 // for each kind of quotes (whether ' or ")
 //done!
+=======
+	else
+		printf("minishell: unclosed quote\n");
+	return (0);
+}
+//i might need to add a special case error
+// for each kind of quotes (whether ' or ")
+>>>>>>> df227a8b5814963f7ec73ee9c87ced4b92dfd4bb
 
 static int	append_quote(char **word, const char *input, int *i)
 {

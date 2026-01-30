@@ -6,7 +6,11 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 16:54:42 by rkobeiss          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2026/01/23 14:47:14 by rkobeiss         ###   ########.fr       */
+=======
+/*   Updated: 2026/01/21 16:44:43 by rkobeiss         ###   ########.fr       */
+>>>>>>> df227a8b5814963f7ec73ee9c87ced4b92dfd4bb
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +35,11 @@ char	*appends(char *input, const char *new)
 
 t_tok	classify(const char *s)
 {
+<<<<<<< HEAD
 	if (!ft_strcmp(s, "|"))
+=======
+	if (!strcmp(s, "|"))
+>>>>>>> df227a8b5814963f7ec73ee9c87ced4b92dfd4bb
 		return (tok_pipe);
 	if (!strcmp(s, "<"))
 		return (tok_inredi);
@@ -60,7 +68,11 @@ void	push_token(t_token **head, t_tok type, const char *value)
 		return ;
 	new->type = type;
 	if (value)
+<<<<<<< HEAD
 		new->value = ft_strdup(value);
+=======
+		new->value = strdup(value);
+>>>>>>> df227a8b5814963f7ec73ee9c87ced4b92dfd4bb
 	else
 		new->value = NULL;
 	new->next = NULL;
