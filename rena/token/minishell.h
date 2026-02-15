@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 14:22:46 by rkobeiss          #+#    #+#             */
-/*   Updated: 2026/02/12 18:33:52 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2026/02/15 19:26:54 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,18 @@ int			ft_strlen(const char *str);
 char		*ft_strcat(char *dest, const char *src);
 char		*ft_strcpy(char *dest, const char *src);
 int			ft_isspace(char a);
+char		*ft_strdup(const char *s);
+void		cmd_dup(t_token **curr, char **cmd, t_ast *node);
+t_ast		*parse_pipe(t_token **curr);
+int			parse_redi(t_ast *node, t_token **curr);
+char		*ft_strncpy(char *dest, const char *src, unsigned int n);
+int			ft_strcmp(const char *s1, const char *s2);
+int			count_words(t_token *t);
+int			redi_helper(t_token **curr, t_redir *redi, t_ast *node);
+int			cmd_helper(t_ast *node, char **cmd, t_token **curr);
+t_ast		*pipe_helper(t_ast *left, t_ast *right);
+t_ast		*parse_subshell(t_token **curr);
+
 // static int	append_quote(char **word, const char *input, int *i);
 // static void	append_char(char **word, char c);
 

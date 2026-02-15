@@ -6,11 +6,11 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 19:19:27 by rkobeiss          #+#    #+#             */
-/*   Updated: 2026/01/30 20:22:42 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2026/02/15 19:29:18 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../token/minishell.h"
 
 void	cmd_dup(t_token **curr, char **cmd, t_ast *node)
 {
@@ -22,7 +22,7 @@ void	cmd_dup(t_token **curr, char **cmd, t_ast *node)
 	{	
 		if (((*curr)->type == tok_inredi || (*curr)->type == tok_outredi
 				|| (*curr)->type == tok_append || (*curr)->type == tok_heredoc))
-			cmd[i++] = parse_redi(node, curr);
+			parse_redi(node, curr);
 		else if ((*curr)->type == tok_word)
 			cmd[i++] = ft_strdup((*curr)->value);
 		*curr = (*curr)->next;
@@ -30,17 +30,97 @@ void	cmd_dup(t_token **curr, char **cmd, t_ast *node)
 	cmd[i] = NULL;
 }
 
-int	count_words(t_token *t)
+int	redi_helper(t_token **curr, t_redir *redi, t_ast *node)
 {
-	int	n;
+	int	temp;
 
-	n = 0;
-	while (t && t->type != tok_pipe && t->type != tok_rparan
-		&& t->type != tok_eof)
+	temp = (*curr)->type;
+	*curr = (*curr)->next;
+	if (!(*curr) || (*curr)->type != tok_word)
+		return (0);
+	if (!redi)
+		return (0);
+	redi->type = temp;
+	redi->target = ft_strdup((*curr)->value);
+	redi->next = NULL;
+	if (!node)
+		return (0);
+	return (1);
+}
+
+t_ast	*cmd_helper(t_ast *node, char **cmd, t_token **curr)
+{
+	int	i;
+
+	node->type = ast_cmd;
+	node->left = NULL;
+	node->right = NULL;
+	node->redir = NULL;
+	i = 0;
+	while (*curr && (*curr)->type == tok_word)
 	{
-		if (t->type == tok_word)
-			n++;
-		t = t->next;
+		cmd[i++] = ft_strdup((*curr)->value);
+		*curr = (*curr)->next;
 	}
-	return (n);
+	cmd[i] = NULL;
+	node->argv = cmd;
+	return (node);
+}
+// int cmd_helper(t_ast *node, char **cmd, t_token **curr)
+// {
+//     int i = 0;
+
+//     node->type = ast_cmd;
+//     node->left = NULL;
+//     node->right = NULL;
+//     node->redir = NULL;
+
+//     while (*curr
+//         && (*curr)->type != tok_pipe
+//         && (*curr)->type != tok_rparan
+//         && (*curr)->type != tok_eof)
+//     {
+//         if ((*curr)->type == tok_word)
+//         {
+//             cmd[i++] = ft_strdup((*curr)->value);
+//             *curr = (*curr)->next;
+//         }
+//         else if ((*curr)->type == tok_lparan)
+//         {
+//             t_ast *sub = parse_subshell(curr);
+//             if (!sub)
+//                 return 0;
+
+//             // store subshell as argv marker
+//             cmd[i++] = ft_strdup("__SUBSHELL__");
+//             node->left = sub; 
+//         }
+//         else if (is_redirection((*curr)->type))
+//         {
+//             if (!parse_redi(node, curr))
+//                 return 0;
+//         }
+//         else
+//             *curr = (*curr)->next;
+//     }
+
+//     cmd[i] = NULL;
+//     node->argv = cmd;
+//     return 1;
+// }
+
+t_ast	*pipe_helper(t_ast *left, t_ast *right)
+{
+	t_ast	*node;
+
+	node = malloc(sizeof(t_ast));
+	if (!node)
+		return (NULL);
+	node->type = ast_pipe;
+	node->left = left;
+	node->right = right;
+	node->argv = NULL;
+	node->redir = NULL;
+	left = node;
+	return (node);
 }
