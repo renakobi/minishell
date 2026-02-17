@@ -71,7 +71,7 @@ int main(void)
     curr = tokens;	
 	print_tokens(tokens);
 		curr = tokens;
-		tree = parse_pipe(&curr);  // entry point
+		tree = parse_input(curr);  // entry point
 		printf("\nAST:\n");
 		print_ast(tree, 0);
 		printf("------------\n");

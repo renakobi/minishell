@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 14:22:46 by rkobeiss          #+#    #+#             */
-/*   Updated: 2026/02/17 14:27:22 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2026/02/17 16:30:35 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ typedef struct s_ast
 	t_data_ast		type;
 	struct s_ast	*right;
 	struct s_ast	*left;
+	struct s_ast	*subshell;
+	struct s_ast	*next_ss;
 	char			**argv;
 	t_redir			*redir;
 }t_ast;
@@ -89,6 +91,7 @@ int			redi_helper(t_token **curr, t_redir *redi, t_ast *node);
 t_ast		*cmd_helper(t_ast *node, char **cmd, t_token **curr);
 t_ast		*pipe_helper(t_ast *left, t_ast *right);
 t_ast		*parse_subshell(t_token **curr);
+t_ast		*parse_input(t_token *tokens);
 
 // static int	append_quote(char **word, const char *input, int *i);
 // static void	append_char(char **word, char c);

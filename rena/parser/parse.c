@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 16:32:17 by rkobeiss          #+#    #+#             */
-/*   Updated: 2026/02/17 15:18:33 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2026/02/17 17:48:00 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,8 @@ t_ast	*parse_subshell(t_token **curr)
 t_ast	*parse_unit(t_token **curr)
 {
 	t_ast	*node;
-	t_ast	*sub;
+	// t_ast	*sub;
+	// t_ast	*tmp;
 
 	if (!curr || !*curr)
 		return (NULL);
@@ -125,21 +126,30 @@ t_ast	*parse_unit(t_token **curr)
 	{
 		if ((*curr)->type == tok_lparan)
 		{
-			sub = parse_subshell(curr);
-			if (!sub)
-				return (NULL);
-			sub->right = node->left;
-			node->left = sub;
+			return (parse_subshell(curr));
+			// if (!sub)
+			// 	return (NULL);
+			// if (!node->subshell)
+			// 	node->subshell = sub;
+			// else
+			// {
+			// 	tmp = node->subshell;
+			// 	while (tmp->next_ss)
+			// 		tmp = tmp->next_ss;
+			// 	tmp->next_ss = sub;
+			// }
 		}
-		else if ((*curr)->type == tok_inredi || (*curr)->type == tok_outredi)
+		else if ((*curr)->type == tok_inredi || (*curr)->type == tok_outredi
+			|| (*curr)->type == tok_append || (*curr)->type == tok_heredoc)
 		{
 			if (!parse_redi(node, curr))
 				return (NULL);
 		}
+		else if ((*curr)->type == tok_lparan)
+			break ;
 		else
 			break ;
 	}
-	printf(" parse_unit token type = %d\n", (*curr)->type);
 	return (node);
 }
 
@@ -157,6 +167,25 @@ t_ast	*parse_unit(t_token **curr)
 	//
 	//
 	//
+t_ast	*parse_input(t_token *tokens)
+{
+	t_token	*curr;
+	t_ast	*root;
+
+	if (!tokens)
+		return (NULL);
+	curr = tokens;
+	root = parse_pipe(&curr);
+	if (!root)
+		return (NULL);
+	if (curr && curr->type != tok_eof)
+	{
+		printf("syntax error near unexpected token '%s'\n",
+			curr->value ? curr->value : "newline");
+		return (NULL);
+	}
+	return (root);
+}
 
 t_ast	*parse_pipe(t_token **curr)
 {
