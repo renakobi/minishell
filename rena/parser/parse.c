@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 16:32:17 by rkobeiss          #+#    #+#             */
-/*   Updated: 2026/02/15 19:28:49 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2026/02/17 15:18:33 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,22 +113,33 @@ t_ast	*parse_subshell(t_token **curr)
 t_ast	*parse_unit(t_token **curr)
 {
 	t_ast	*node;
+	t_ast	*sub;
 
 	if (!curr || !*curr)
 		return (NULL);
-	if ((*curr)->type == tok_lparan)
+	node = parse_cmd(curr);
+	if (!node)
+		return (NULL);
+	while (*curr && (*curr)->type != tok_pipe
+		&& (*curr)->type != tok_rparan && (*curr)->type != tok_eof)
 	{
-		node = parse_subshell(curr);
-		if (!node)
-			return (NULL);
+		if ((*curr)->type == tok_lparan)
+		{
+			sub = parse_subshell(curr);
+			if (!sub)
+				return (NULL);
+			sub->right = node->left;
+			node->left = sub;
+		}
+		else if ((*curr)->type == tok_inredi || (*curr)->type == tok_outredi)
+		{
+			if (!parse_redi(node, curr))
+				return (NULL);
+		}
+		else
+			break ;
 	}
-	else
-	{
-		node = parse_cmd(curr);
-		if (!node)
-			return (NULL);
-	}
-	parse_redi(node, curr);
+	printf(" parse_unit token type = %d\n", (*curr)->type);
 	return (node);
 }
 

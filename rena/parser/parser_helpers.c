@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 19:19:27 by rkobeiss          #+#    #+#             */
-/*   Updated: 2026/02/15 19:29:18 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2026/02/17 15:19:58 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,22 @@ t_ast	*cmd_helper(t_ast *node, char **cmd, t_token **curr)
 	node->right = NULL;
 	node->redir = NULL;
 	i = 0;
-	while (*curr && (*curr)->type == tok_word)
+	while (*curr && (*curr)->type != tok_pipe
+		&& (*curr)->type != tok_rparan && (*curr)->type != tok_eof)
 	{
-		cmd[i++] = ft_strdup((*curr)->value);
-		*curr = (*curr)->next;
+		if ((*curr)->type == tok_word)
+		{
+			cmd[i++] = ft_strdup((*curr)->value);
+			*curr = (*curr)->next;
+		}
+		else if ((*curr)->type == tok_inredi || (*curr)->type == tok_outredi
+			|| (*curr)->type == tok_append || (*curr)->type == tok_heredoc)
+		{
+			if (!parse_redi(node, curr))
+				return (0);
+		}
+		else
+			break ;
 	}
 	cmd[i] = NULL;
 	node->argv = cmd;
@@ -121,6 +133,5 @@ t_ast	*pipe_helper(t_ast *left, t_ast *right)
 	node->right = right;
 	node->argv = NULL;
 	node->redir = NULL;
-	left = node;
 	return (node);
 }

@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 14:22:46 by rkobeiss          #+#    #+#             */
-/*   Updated: 2026/02/15 19:26:54 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2026/02/17 14:27:22 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char		*ft_strncpy(char *dest, const char *src, unsigned int n);
 int			ft_strcmp(const char *s1, const char *s2);
 int			count_words(t_token *t);
 int			redi_helper(t_token **curr, t_redir *redi, t_ast *node);
-int			cmd_helper(t_ast *node, char **cmd, t_token **curr);
+t_ast		*cmd_helper(t_ast *node, char **cmd, t_token **curr);
 t_ast		*pipe_helper(t_ast *left, t_ast *right);
 t_ast		*parse_subshell(t_token **curr);
 
