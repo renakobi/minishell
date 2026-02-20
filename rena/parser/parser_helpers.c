@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 19:19:27 by rkobeiss          #+#    #+#             */
-/*   Updated: 2026/02/17 15:19:58 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2026/02/20 15:10:26 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,10 @@ t_ast	*cmd_helper(t_ast *node, char **cmd, t_token **curr)
 			cmd[i++] = ft_strdup((*curr)->value);
 			*curr = (*curr)->next;
 		}
-		else if ((*curr)->type == tok_inredi || (*curr)->type == tok_outredi
-			|| (*curr)->type == tok_append || (*curr)->type == tok_heredoc)
-		{
-			if (!parse_redi(node, curr))
-				return (0);
-		}
+		else if (((*curr)->type == tok_inredi || (*curr)->type == tok_outredi
+				|| (*curr)->type == tok_append || (*curr)->type == tok_heredoc)
+			&& !parse_redi(node, curr))
+			return (0);
 		else
 			break ;
 	}
@@ -120,6 +118,27 @@ t_ast	*cmd_helper(t_ast *node, char **cmd, t_token **curr)
 //     node->argv = cmd;
 //     return 1;
 // }
+t_ast	*parse_input(t_token *tokens)
+{
+	t_token	*curr;
+	t_ast	*root;
+
+	if (!tokens)
+		return (NULL);
+	curr = tokens;
+	root = parse_pipe(&curr);
+	if (!root)
+		return (NULL);
+	if (curr && curr->type != tok_eof)
+	{
+		if (curr->value)
+			printf("syntax error near unexpected token '%s'\n", curr->value);
+		else
+			printf("syntax error near unexpected token '%s'\n", "newline");
+		return (NULL);
+	}
+	return (root);
+}
 
 t_ast	*pipe_helper(t_ast *left, t_ast *right)
 {

@@ -63,7 +63,7 @@ int main(void)
 	t_ast *tree;
 	while (1)
 	{
-		line = readline(">>> ");
+		line = readline(">>>");
 		if (!line)
 			break;
     tokens = NULL;
