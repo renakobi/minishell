@@ -2,7 +2,7 @@ NAME = minishell
 cc = cc
 CFLAGS = -Werror -Wextra -Wall
 
-SRC = read.c token_extra.c token.c test.c helpers.c ../parser/parse.c ../parser/parser_helpers.c ../parser/testparse.c ../parser/utils.c
+SRC = read.c token_extra.c token.c test.c helpers.c ../parser/parse.c ../parser/parser_helpers.c ../parser/testparse.c ../parser/utils.c edge_cases.c
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)

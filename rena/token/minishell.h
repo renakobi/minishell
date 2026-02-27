@@ -6,7 +6,7 @@
 /*   By: rkobeiss <rkobeiss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 14:22:46 by rkobeiss          #+#    #+#             */
-/*   Updated: 2026/02/17 16:30:35 by rkobeiss         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:23:37 by rkobeiss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ t_ast		*cmd_helper(t_ast *node, char **cmd, t_token **curr);
 t_ast		*pipe_helper(t_ast *left, t_ast *right);
 t_ast		*parse_subshell(t_token **curr);
 t_ast		*parse_input(t_token *tokens);
+int			validate_1(t_token *t);
 
 // static int	append_quote(char **word, const char *input, int *i);
 // static void	append_char(char **word, char c);
